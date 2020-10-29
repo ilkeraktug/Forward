@@ -1,7 +1,5 @@
 #pragma once
 
-#include "Application.h"
-
 #ifdef FW_PLATFORM_WINDOWS
 
 extern Forward::Application* CreateApplication();
@@ -9,7 +7,8 @@ extern Forward::Application* CreateApplication();
 int main()
 {
 	auto app = CreateApplication();
-	std::cout << "Forward!\n";
+	Forward::Log::Init();
+	FW_WARN("Hello!");
 	app->Run();
 	delete app;
 }
