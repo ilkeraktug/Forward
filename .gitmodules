@@ -1,3 +1,6 @@
 [submodule "Forward\\vendor"]
 	path = Forward\\vendor
 	url = https://github.com/gabime/spdlog.git
+[submodule "Forward/vendor/GLFW"]
+	path = Forward/vendor/GLFW
+	url = https://github.com/glfw/glfw.git

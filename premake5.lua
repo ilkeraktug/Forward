@@ -10,6 +10,11 @@ workspace "Forward"
 
 outputdir = "%{cfg.buildcfg}-%{cfg.system}-%{cfg.architecture}"
 
+IncludeDir = {}
+IncludeDir["GLFW"] = "Forward/vendor/GLFW/include"
+
+include "Forward/vendor/GLFW"
+
 	project "Forward"
 		location "Forward"
 		kind "SharedLib"
@@ -17,6 +22,9 @@ outputdir = "%{cfg.buildcfg}-%{cfg.system}-%{cfg.architecture}"
 
 	targetdir ("bin/" .. outputdir .. "/%{prj.name}/")
 	objdir ("bin-int/" .. outputdir .. "/%{prj.name}/")
+
+	pchheader("fwpch.h")
+	pchsource("Forward/src/fwpch.cpp")
 
 	files
 	{
@@ -26,7 +34,15 @@ outputdir = "%{cfg.buildcfg}-%{cfg.system}-%{cfg.architecture}"
 
 	includedirs
 	{
-		"%{prj.name}/vendor/spdlog/include"
+		"%{prj.name}/src",
+		"%{prj.name}/vendor/spdlog/include",
+		"%{IncludeDir.GLFW}"
+	}
+
+	links
+	{
+		"GLFW",
+		"opengl32.lib"
 	}
 
 	filter "system:windows"
@@ -47,6 +63,7 @@ outputdir = "%{cfg.buildcfg}-%{cfg.system}-%{cfg.architecture}"
 	
 	filter "configurations:Debug"
 		defines "FW_DEBUG"
+		defines "FW_ENABLE_ASSERT"
 		symbols "On"
 
 	filter "configurations:Release"
