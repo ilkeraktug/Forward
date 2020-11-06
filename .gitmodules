@@ -4,3 +4,9 @@
 [submodule "Forward/vendor/GLFW"]
 	path = Forward/vendor/GLFW
 	url = https://github.com/glfw/glfw.git
+[submodule "Forward/vendor/imgui"]
+	path = Forward/vendor/imgui
+	url = https://github.com/ocornut/imgui.git
+[submodule "Forward/vendor/glm"]
+	path = Forward/vendor/glm
+	url = https://github.com/g-truc/glm.git

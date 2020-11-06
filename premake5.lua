@@ -1,5 +1,6 @@
 workspace "Forward"
 	architecture "x64"
+	startproject "Sandbox"
 
 	configurations
 	{
@@ -8,12 +9,21 @@ workspace "Forward"
 		"Dist"
 	}
 
+
+
 outputdir = "%{cfg.buildcfg}-%{cfg.system}-%{cfg.architecture}"
 
 IncludeDir = {}
 IncludeDir["GLFW"] = "Forward/vendor/GLFW/include"
+IncludeDir["GLAD"] = "Forward/vendor/GLAD/include"
+IncludeDir["imgui"] = "Forward/vendor/imgui/imgui"
+IncludeDir["glm"] = "Forward/vendor/glm"
+
 
 include "Forward/vendor/GLFW"
+include "Forward/vendor/GLAD"
+include "Forward/vendor/imgui/imgui"
+
 
 	project "Forward"
 		location "Forward"
@@ -29,19 +39,26 @@ include "Forward/vendor/GLFW"
 	files
 	{
 		"%{prj.name}/src/**.h",
-		"%{prj.name}/src/**.cpp"
+		"%{prj.name}/src/**.cpp",
+		"%{IncludeDir.glm}/**.hpp",
+		"%{IncludeDir.glm}/**.inl"
 	}
 
 	includedirs
 	{
 		"%{prj.name}/src",
 		"%{prj.name}/vendor/spdlog/include",
-		"%{IncludeDir.GLFW}"
+		"%{IncludeDir.GLFW}",
+		"%{IncludeDir.GLAD}",
+		"%{IncludeDir.imgui}",
+		"%{IncludeDir.glm}"
 	}
 
 	links
 	{
 		"GLFW",
+		"GLAD",
+		"ImGui",
 		"opengl32.lib"
 	}
 
@@ -53,7 +70,8 @@ include "Forward/vendor/GLFW"
 		defines
 		{
 			"FW_PLATFORM_WINDOWS",
-			"FW_BUILD_DLL"
+			"FW_BUILD_DLL",
+			"GLFW_INCLUDE_NONE"
 		}
 
 		postbuildcommands
@@ -64,14 +82,17 @@ include "Forward/vendor/GLFW"
 	filter "configurations:Debug"
 		defines "FW_DEBUG"
 		defines "FW_ENABLE_ASSERT"
+		buildoptions "/MDd"
 		symbols "On"
 
 	filter "configurations:Release"
 		defines "FW_RELEASE"
+		buildoptions "/MD"
 		optimize "On"
 
 	filter "configurations:Dist"
 		defines "FW_DIST"
+		buildoptions "/MD"
 		optimize "On"
 
 project "Sandbox"
@@ -91,7 +112,8 @@ project "Sandbox"
 	includedirs
 	{
 		"Forward/vendor/spdlog/include",
-		"Forward/src"
+		"Forward/src",
+		"%{IncludeDir.glm}"
 	}
 
 	links
@@ -111,12 +133,15 @@ project "Sandbox"
 
 	filter "configurations:Debug"
 		defines "FW_DEBUG"
+		buildoptions "/MDd"
 		symbols "On"
 
 	filter "configurations:Release"
 		defines "FW_RELEASE"
+		buildoptions "/MD"
 		optimize "On"
 
 	filter "configurations:Dist"
 		defines "FW_DIST"
+		buildoptions "/MD"
 		optimize "On"

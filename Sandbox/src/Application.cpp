@@ -1,10 +1,10 @@
 #include <Forward.h>
 
-class Sandbox : public Forward::Application {
+class Sandbox : public Forward::Application
+{
 public:
 	Sandbox()
 	{
-
 	}
 	~Sandbox()
 	{

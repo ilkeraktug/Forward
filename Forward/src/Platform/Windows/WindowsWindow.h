@@ -2,7 +2,7 @@
 
 #include "Forward\Window.h"
 
-#include <GLFW\glfw3.h>
+struct GLFWwindow;
 
 namespace Forward {
 
@@ -21,6 +21,7 @@ namespace Forward {
 		inline void SetEventCallback(const EventCallbackFn& callback) override { m_Data.EventCallback = callback; }
 		virtual void SetVSync(bool enable) override;
 		inline bool IsVSync() const override { return m_Data.VSync; }
+		virtual void* GetNativeWindow() const override { return m_Window; }
 	private:
 		virtual void Init(const WindowProps& props);
 		virtual void Shutdown();
