@@ -40,7 +40,7 @@ namespace Forward {
 			return ss.str();
 		}
 
-		EVENT_CLASS_TYPE(MouseScroll)
+		EVENT_CLASS_TYPE(MouseScrolled)
 		EVENT_CLASS_CATEGORY(EventCategoryMouse | EventCategoryInput)
 	private:
 		float m_OffsetX, m_OffsetY;
@@ -88,6 +88,6 @@ namespace Forward {
 			return ss.str();
 		}
 
-		EVENT_CLASS_TYPE(MouseButtonReleasedEvent)
+		EVENT_CLASS_TYPE(MouseButtonReleased)
 	};
 }

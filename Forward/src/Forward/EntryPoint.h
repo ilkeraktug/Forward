@@ -7,8 +7,7 @@ extern Forward::Application* CreateApplication();
 int main()
 {
 	auto app = CreateApplication();
-	Forward::Log::Init();
-	FW_WARN("Hello!");
+	FW_INFO("Entry Point!");
 	app->Run();
 	delete app;
 }
