@@ -1,6 +1,9 @@
 #pragma once
 
 #include "Forward\Window.h"
+#include "Forward\Renderer\GraphicsContext.h"
+
+#include "GLFW\glfw3.h"
 
 struct GLFWwindow;
 
@@ -28,6 +31,7 @@ namespace Forward {
 
 	private:
 		GLFWwindow* m_Window;
+		GraphicsContext* m_Context;
 
 		struct WindowData
 		{
