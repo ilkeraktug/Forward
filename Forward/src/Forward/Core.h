@@ -1,11 +1,15 @@
 #pragma once
 
 #ifdef FW_PLATFORM_WINDOWS
+#if FW_DYNAMIC_LINK
 	#ifdef FW_BUILD_DLL 
-		#define FORWARD_API _declspec(dllexport)
+		#define FORWARD_API __declspec(dllexport)
 	#else
-		#define FORWARD_API _declspec(dllimport)
+		#define FORWARD_API __declspec(dllimport)
 	#endif
+#else
+	#define FORWARD_API
+#endif
 #else
 	#error Only Windows
 #endif

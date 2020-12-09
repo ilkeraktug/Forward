@@ -8,6 +8,8 @@
 #include "Forward\Events\KeyEvent.h"
 #include "Forward\Events\MouseEvent.h"
 #include "Forward\ImGui\ImGuiLayer.h"
+#include "Platform\OpenGL\OpenGLBuffer.h"
+#include "Forward\Renderer\Shader.h"
 
 namespace Forward {
 	class FORWARD_API Application
@@ -32,6 +34,12 @@ namespace Forward {
 		ImGuiLayer* m_ImGuiLayer;
 		bool m_Running = true;
 		LayerStack m_LayerStack;
+
+		uint32_t m_VertexArray;
+		std::unique_ptr<VertexBuffer> m_VertexBuffer;
+		std::unique_ptr<IndexBuffer> m_IndexBuffer;
+
+		std::unique_ptr<Shader> m_Shader;
 	private:
 		static Application* s_Instance;
 	};

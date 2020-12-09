@@ -17,6 +17,11 @@ namespace Forward {
 		glfwMakeContextCurrent(m_Window);
 		int status = gladLoadGLLoader((GLADloadproc)glfwGetProcAddress);
 		FW_CORE_ASSERT(status, "Failed to initialize GLAD!");
+
+		FW_CORE_INFO("OpenGL Info : ");
+		FW_CORE_INFO("\tVendor   : {0}", glGetString(GL_VENDOR));
+		FW_CORE_INFO("\tRenderer : {0}", glGetString(GL_RENDERER));
+		FW_CORE_INFO("\tVersion  : {0}", glGetString(GL_VERSION));
 	}
 
 	void OpenGLContext::SwapBuffers()

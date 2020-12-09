@@ -10,7 +10,6 @@ workspace "Forward"
 	}
 
 
-
 outputdir = "%{cfg.buildcfg}-%{cfg.system}-%{cfg.architecture}"
 
 IncludeDir = {}
@@ -27,8 +26,10 @@ include "Forward/vendor/imgui"
 
 	project "Forward"
 		location "Forward"
-		kind "SharedLib"
+		kind "StaticLib"
 		language "C++"
+		cppdialect "C++17"
+		staticruntime "on"
 
 	targetdir ("bin/" .. outputdir .. "/%{prj.name}/")
 	objdir ("bin-int/" .. outputdir .. "/%{prj.name}/")
@@ -43,7 +44,10 @@ include "Forward/vendor/imgui"
 		"%{IncludeDir.glm}/**.hpp",
 		"%{IncludeDir.glm}/**.inl"
 	}
-
+	defines
+	{
+		"_CRT_SECURE_NO_WARNINGS"
+	}
 	includedirs
 	{
 		"%{prj.name}/src",
@@ -63,8 +67,6 @@ include "Forward/vendor/imgui"
 	}
 
 	filter "system:windows"
-		cppdialect "C++17"
-		staticruntime "On"
 		systemversion "latest"
 
 		defines
@@ -73,32 +75,29 @@ include "Forward/vendor/imgui"
 			"FW_BUILD_DLL",
 			"GLFW_INCLUDE_NONE"
 		}
-
-		postbuildcommands
-		{
-			"{COPY} %{cfg.buildtarget.relpath} ../bin/" .. outputdir .. "/Sandbox"
-		}
 	
 	filter "configurations:Debug"
 		defines "FW_DEBUG"
 		defines "FW_ENABLE_ASSERT"
-		buildoptions "/MDd"
-		symbols "On"
+		runtime "Debug"
+		symbols "on"
 
 	filter "configurations:Release"
 		defines "FW_RELEASE"
-		buildoptions "/MD"
+		runtime "Release"
 		optimize "On"
 
 	filter "configurations:Dist"
 		defines "FW_DIST"
-		buildoptions "/MD"
+		runtime "Release"
 		optimize "On"
 
 project "Sandbox"
 	location "Sandbox"
 	kind "ConsoleApp"
 	language "C++"
+	cppdialect "C++17"
+	staticruntime "on"
 
 	targetdir ("bin/" .. outputdir .. "/%{prj.name}/")
 	objdir ("bin-int/" .. outputdir .. "/%{prj.name}/")
@@ -133,15 +132,15 @@ project "Sandbox"
 
 	filter "configurations:Debug"
 		defines "FW_DEBUG"
-		buildoptions "/MDd"
+		runtime "Debug"
 		symbols "On"
 
 	filter "configurations:Release"
 		defines "FW_RELEASE"
-		buildoptions "/MD"
+		runtime "Release"
 		optimize "On"
 
 	filter "configurations:Dist"
 		defines "FW_DIST"
-		buildoptions "/MD"
+		runtime "Release"
 		optimize "On"
