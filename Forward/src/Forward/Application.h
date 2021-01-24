@@ -4,11 +4,15 @@
 
 #include "Window.h"
 #include "Forward\LayerStack.h"
+
 #include "Forward\Events\ApplicationEvent.h"
 #include "Forward\Events\KeyEvent.h"
 #include "Forward\Events\MouseEvent.h"
 #include "Forward\ImGui\ImGuiLayer.h"
+
 #include "Platform\OpenGL\OpenGLBuffer.h"
+#include "Platform\OpenGL\OpenGLVertexArray.h"
+
 #include "Forward\Renderer\Shader.h"
 
 namespace Forward {
@@ -32,12 +36,11 @@ namespace Forward {
 	private:
 		std::unique_ptr<Window> m_Window;
 		ImGuiLayer* m_ImGuiLayer;
-		bool m_Running = true;
 		LayerStack m_LayerStack;
 
-		uint32_t m_VertexArray;
-		std::unique_ptr<VertexBuffer> m_VertexBuffer;
-		std::unique_ptr<IndexBuffer> m_IndexBuffer;
+		bool m_Running = true;
+
+		std::shared_ptr<VertexArray> m_VertexArray;
 
 		std::unique_ptr<Shader> m_Shader;
 	private:

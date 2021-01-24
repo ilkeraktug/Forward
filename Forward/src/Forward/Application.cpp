@@ -4,35 +4,12 @@
 #include "Forward\Log.h"
 #include "Forward\Input.h"
 
-#include <GLFW/glfw3.h>
-#include <glad\glad.h>
+#include "Renderer\Renderer.h"
 
 namespace Forward {
 
 	#define BIND_EVENT_FUNC(x) std::bind(&Application::x, this, std::placeholders::_1)
 	Application* Application::s_Instance = nullptr;
-
-	static GLenum ShaderDataTypeToOpenGLBaseType(ShaderDataType type)
-	{
-		switch (type)
-		{
-		case Forward::ShaderDataType::Float:    return GL_FLOAT;
-		case Forward::ShaderDataType::Float2:   return GL_FLOAT;
-		case Forward::ShaderDataType::Float3:   return GL_FLOAT;
-		case Forward::ShaderDataType::Float4:   return GL_FLOAT;
-		case Forward::ShaderDataType::Mat3:     return GL_FLOAT;
-		case Forward::ShaderDataType::Mat4:     return GL_FLOAT;
-		case Forward::ShaderDataType::Int:      return GL_INT;
-		case Forward::ShaderDataType::Int2:     return GL_INT;
-		case Forward::ShaderDataType::Int3:     return GL_INT;
-		case Forward::ShaderDataType::Int4:     return GL_INT;
-		case Forward::ShaderDataType::Bool:     return GL_BOOL;
-		}
-
-		FW_CORE_ASSERT(false, "Unknown ShaderDataType!");
-		return 0;
-	}
-
 
 	Application::Application()
 	{
@@ -46,55 +23,45 @@ namespace Forward {
 		m_ImGuiLayer = new ImGuiLayer();
 		PushOverlay(m_ImGuiLayer);
 
-		glGenVertexArrays(1, &m_VertexArray);
-		glBindVertexArray(m_VertexArray);
+		m_VertexArray.reset(VertexArray::Create());
 
 		float vertices[] = {
-			-0.5f, -0.5f, 0.0f,
-			 0.5f, -0.5f, 0.0f,
-			 0.0f,  0.5f, 0.0f
+			//Vertex Positions,		Colors
+			-0.5f, -0.5f, 0.0f,		1.0f, 0.5f, 0.31f, 1.0f,
+			 0.5f, -0.5f, 0.0f,		0.0f, 0.8f, 0.8f, 1.0f,
+			 0.0f,  0.5f, 0.0f,		1.0f, 0.0f, 1.0f, 1.0f
 		};
 
-		m_VertexBuffer.reset(VertexBuffer::Create(vertices, sizeof(vertices)));
+		std::shared_ptr<VertexBuffer> vertexBuffer;
 
-		{
-			BufferLayout layout = {
-				{ ShaderDataType::Float3, "a_Position" },
-			};
+		vertexBuffer.reset(VertexBuffer::Create(vertices, sizeof(vertices)));
+
+		BufferLayout layout = {
+			{ ShaderDataType::Float3, "a_Position" },
+			{ ShaderDataType::Float4, "a_Color" },
+		};
 		
-			m_VertexBuffer->SetLayout(layout);
-		}
-
-		uint32_t index = 0;
-		const auto& layout = m_VertexBuffer->GetLayout();
-		for (const auto& element : layout)
-		{
-			glEnableVertexAttribArray(index);
-			glVertexAttribPointer(index, 
-				element.GetComponentCount(), 
-				ShaderDataTypeToOpenGLBaseType(element.Type), 
-				element.Normalized ? GL_TRUE : GL_FALSE, 
-				layout.GetStride(), 
-				(const void*)element.Offset);
-
-			index++;
-		}
-
-		//glEnableVertexAttribArray(0);
-		//glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), nullptr);
+		vertexBuffer->SetLayout(layout);
+		m_VertexArray->AddVertexBuffer(vertexBuffer);
 
 		uint32_t indices[] = { 0, 1, 2 };
+		std::shared_ptr<IndexBuffer> indexBuffer;
+		indexBuffer.reset(IndexBuffer::Create(indices, 3));
 
-		m_IndexBuffer.reset(IndexBuffer::Create(indices, 3));
+		m_VertexArray->AddIndexBuffer(indexBuffer);
 
 		std::string vertexSrc = R"(
 		#version 330
 	
 		layout(location = 0) in vec4 a_Position;
+		layout(location = 1) in vec4 a_Color;
+
+		out vec4 v_Color;		
 
 		void main()
 		{
 			gl_Position = a_Position;
+			v_Color = a_Color;
 		})";
 
 		std::string fragmentSrc = R"(
@@ -102,9 +69,12 @@ namespace Forward {
 	
 		layout(location = 0) out vec4 color;
 
+		in vec4 v_Color;
+
 		void main()
 		{
 			color = vec4(1.0f, 0.5f, 0.31f, 1.0f);
+			color = v_Color;
 		})";
 
 		m_Shader.reset(new Shader(vertexSrc, fragmentSrc));
@@ -119,10 +89,18 @@ namespace Forward {
 	{
 		while (m_Running)
 		{
-			glClear(GL_COLOR_BUFFER_BIT);
+			RenderCommand::SetClearColor(glm::vec4(0.1f, 0.1f, 0.1f, 1.0f));
+			RenderCommand::Clear();
+			
+			{
+				Renderer::BeginScene();
 
-			glBindVertexArray(m_VertexArray);
-			glDrawElements(GL_TRIANGLES, 3, GL_UNSIGNED_INT, nullptr);
+				Renderer::Submit(m_VertexArray);
+
+				Renderer::EndScene();
+			}
+
+
 
 			for (Layer* layer : m_LayerStack)
 				layer->OnUpdate();

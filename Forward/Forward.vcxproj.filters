@@ -99,9 +99,6 @@
     <ClInclude Include="src\Forward\Renderer\GraphicsContext.h">
       <Filter>src\Forward\Renderer</Filter>
     </ClInclude>
-    <ClInclude Include="src\Forward\Renderer\Renderer.h">
-      <Filter>src\Forward\Renderer</Filter>
-    </ClInclude>
     <ClInclude Include="src\Forward\Window.h">
       <Filter>src\Forward</Filter>
     </ClInclude>
@@ -1351,6 +1348,14 @@
       <Filter>vendor\glm\glm</Filter>
     </ClInclude>
     <ClInclude Include="src\Forward\Renderer\Shader.h" />
+    <ClInclude Include="src\Forward\Renderer\VertexArray.h" />
+    <ClInclude Include="src\Platform\OpenGL\OpenGLVertexArray.h" />
+    <ClInclude Include="src\Forward\Renderer\RenderCommand.h" />
+    <ClInclude Include="src\Forward\Renderer\Renderer.h">
+      <Filter>src\Forward\Renderer</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Forward\Renderer\RendererAPI.h" />
+    <ClInclude Include="src\Platform\OpenGL\OpenGLRendererAPI.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Forward\Application.cpp">
@@ -1390,5 +1395,11 @@
       <Filter>src</Filter>
     </ClCompile>
     <ClCompile Include="src\Forward\Renderer\Shader.cpp" />
+    <ClCompile Include="src\Forward\Renderer\VertexArray.cpp" />
+    <ClCompile Include="src\Platform\OpenGL\OpenGLVertexArray.cpp" />
+    <ClCompile Include="src\Forward\Renderer\RenderCommand.cpp" />
+    <ClCompile Include="src\Forward\Renderer\Renderer.cpp" />
+    <ClCompile Include="src\Forward\Renderer\RendererAPI.cpp" />
+    <ClCompile Include="src\Platform\OpenGL\OpenGLRendererAPI.cpp" />
   </ItemGroup>
 </Project>

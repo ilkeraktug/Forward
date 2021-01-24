@@ -9,8 +9,8 @@ namespace Forward {
 	{
 		switch (Renderer::GetAPI())
 		{
-		case RendererAPI::None:		FW_CORE_ASSERT(false, "Renderer API : None is selected!"); return nullptr;
-		case RendererAPI::OpenGL:	return new OpenGLVertexBuffer(vertices, size);
+		case RendererAPI::API::None:		FW_CORE_ASSERT(false, "Renderer API : None is selected!"); return nullptr;
+		case RendererAPI::API::OpenGL:	return new OpenGLVertexBuffer(vertices, size);
 		}
 
 		FW_CORE_ASSERT(false, "Unknown API!"); return nullptr;
@@ -19,8 +19,8 @@ namespace Forward {
 	{
 		switch (Renderer::GetAPI())
 		{
-		case RendererAPI::None:		FW_CORE_ASSERT(false, "Renderer API : None is selected!"); return nullptr;
-		case RendererAPI::OpenGL:	return new OpenGLIndexBuffer(indices, count);
+		case RendererAPI::API::None:		FW_CORE_ASSERT(false, "Renderer API : None is selected!"); return nullptr;
+		case RendererAPI::API::OpenGL:	return new OpenGLIndexBuffer(indices, count);
 		}
 
 		FW_CORE_ASSERT(false, "Unknown API!"); return nullptr;
