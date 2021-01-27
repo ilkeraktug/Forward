@@ -128,6 +128,12 @@ namespace Forward {
 		glDeleteProgram(m_RendererID);
 	}
 
+	void Shader::UploadUniformMat4(const std::string& name, const glm::mat4& matrix)
+	{
+		int location = glGetUniformLocation(m_RendererID, name.c_str());
+		glUniformMatrix4fv(location, 1, GL_FALSE, &matrix[0][0]);
+	}
+
 	void Shader::Bind() const
 	{
 		glUseProgram(m_RendererID);

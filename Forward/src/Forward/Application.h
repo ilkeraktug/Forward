@@ -14,6 +14,7 @@
 #include "Platform\OpenGL\OpenGLVertexArray.h"
 
 #include "Forward\Renderer\Shader.h"
+#include "Forward\Renderer\OrthographicCamera.h"
 
 namespace Forward {
 	class FORWARD_API Application
@@ -40,9 +41,6 @@ namespace Forward {
 
 		bool m_Running = true;
 
-		std::shared_ptr<VertexArray> m_VertexArray;
-
-		std::unique_ptr<Shader> m_Shader;
 	private:
 		static Application* s_Instance;
 	};

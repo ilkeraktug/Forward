@@ -9,6 +9,14 @@
 #include "Forward/MouseButtonKeys.h"
 
 #include "Forward/ImGui/ImGuiLayer.h"
+
+
+#include "Forward\Renderer\Buffer.h"
+#include "Forward\Renderer\Renderer.h"
+#include "Forward\Renderer\RenderCommand.h"
+#include "Forward\Renderer\VertexArray.h"
+#include "Forward\Renderer\Shader.h"
+
 //------------Entry Point--------
-#include "Forward\EntryPoint.h"
+#include "Forward/EntryPoint.h"
 //-------------------------------
