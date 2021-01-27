@@ -2,7 +2,7 @@
 
 #include "Forward\Core.h"
 #include "Forward\Events\Event.h"
-
+#include "Forward\Core\Timestep.h"
 namespace Forward {
 
 	class FORWARD_API Layer
@@ -14,7 +14,7 @@ namespace Forward {
 		
 		virtual void OnAttach() {}
 		virtual void OnDetach() {}
-		virtual void OnUpdate() {}
+		virtual void OnUpdate(Timestep ts) {}
 		virtual void OnImGuiRender() {}
 		virtual void OnEvent(Event& e) {}
 

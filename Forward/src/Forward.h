@@ -10,6 +10,7 @@
 
 #include "Forward/ImGui/ImGuiLayer.h"
 
+#include "Forward\Core\Timestep.h"
 
 #include "Forward\Renderer\Buffer.h"
 #include "Forward\Renderer\Renderer.h"

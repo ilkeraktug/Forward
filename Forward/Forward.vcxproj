@@ -143,6 +143,7 @@
     <ClInclude Include="src\Forward.h" />
     <ClInclude Include="src\Forward\Application.h" />
     <ClInclude Include="src\Forward\Core.h" />
+    <ClInclude Include="src\Forward\Core\Timestep.h" />
     <ClInclude Include="src\Forward\EntryPoint.h" />
     <ClInclude Include="src\Forward\Events\ApplicationEvent.h" />
     <ClInclude Include="src\Forward\Events\Event.h" />

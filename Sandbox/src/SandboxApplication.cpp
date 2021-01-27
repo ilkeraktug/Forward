@@ -66,10 +66,40 @@ public:
 		m_Camera.SetRotation(-45.0f);
 	}
 
-	virtual void OnUpdate() override
+	virtual void OnUpdate(Forward::Timestep ts) override
 	{
 		Forward::RenderCommand::SetClearColor(glm::vec4(0.1f, 0.1f, 0.1f, 1.0f));
 		Forward::RenderCommand::Clear();
+
+		if (Forward::Input::IsKeyPressed(FW_KEY_LEFT))
+		{
+			m_CameraPosition.x -= m_CameraMoveSpeed * ts;
+		}
+		else if (Forward::Input::IsKeyPressed(FW_KEY_RIGHT))
+		{
+			m_CameraPosition.x += m_CameraMoveSpeed * ts;
+		}
+
+		if (Forward::Input::IsKeyPressed(FW_KEY_UP))
+		{
+			m_CameraPosition.y += m_CameraMoveSpeed * ts;
+		}
+		else if (Forward::Input::IsKeyPressed(FW_KEY_DOWN))
+		{
+			m_CameraPosition.y -= m_CameraMoveSpeed * ts;
+		}
+
+		if (Forward::Input::IsKeyPressed(FW_KEY_E))
+		{
+			m_CameraRotation -= m_CameraRotationSpeed * ts;
+		}
+		else if (Forward::Input::IsKeyPressed(FW_KEY_Q))
+		{
+			m_CameraRotation += m_CameraRotationSpeed * ts;
+		}
+
+		m_Camera.SetPosition(m_CameraPosition);
+		m_Camera.SetRotation(m_CameraRotation);
 
 		{
 			Forward::Renderer::BeginScene(m_Camera);
@@ -87,6 +117,11 @@ private:
 	std::shared_ptr<Forward::Shader> m_Shader;
 
 	Forward::OrthographicCamera m_Camera;
+	glm::vec3 m_CameraPosition = { 0.0f, 0.0f, 0.0f };
+	float m_CameraMoveSpeed = 5.0f;
+
+	float m_CameraRotation = 0.0f;
+	float m_CameraRotationSpeed = 180.0f;
 };
 
 

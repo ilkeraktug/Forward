@@ -6,6 +6,8 @@
 
 #include "Renderer\Renderer.h"
 
+#include <GLFW\glfw3.h>
+
 namespace Forward {
 
 	#define BIND_EVENT_FUNC(x) std::bind(&Application::x, this, std::placeholders::_1)
@@ -33,8 +35,14 @@ namespace Forward {
 	{
 		while (m_Running)
 		{
+			float time = (float)glfwGetTime();
+			Timestep ts = time - m_LastFrameTime;
+			m_LastFrameTime = time;
+
+			FW_TRACE("Delta time : {0}s, {1}ms, {2}FPS", ts, ts.GetMiliseconds(), 1 / ts);
+
 			for (Layer* layer : m_LayerStack)
-				layer->OnUpdate();
+				layer->OnUpdate(ts);
 
 			m_ImGuiLayer->Begin();
 			for (Layer* layer : m_LayerStack)
