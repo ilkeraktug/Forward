@@ -7,6 +7,7 @@
 #include "Renderer\Renderer.h"
 
 #include <GLFW\glfw3.h>
+#include <glad\glad.h>
 
 namespace Forward {
 
@@ -19,7 +20,7 @@ namespace Forward {
 		s_Instance = this;	
 
 		Log::Init();
-		m_Window = std::unique_ptr<Window>(Window::Create());
+		m_Window = Scope<Window>(Window::Create());
 		m_Window->SetEventCallback(BIND_EVENT_FUNC(OnEvent));
 
 		m_ImGuiLayer = new ImGuiLayer();
@@ -39,7 +40,7 @@ namespace Forward {
 			Timestep ts = time - m_LastFrameTime;
 			m_LastFrameTime = time;
 
-			FW_TRACE("Delta time : {0}s, {1}ms, {2}FPS", ts, ts.GetMiliseconds(), 1 / ts);
+			//FW_TRACE("Delta time : {0}s, {1}ms, {2}FPS", ts, ts.GetMiliseconds(), 1 / ts); DeltaTime, FPS
 
 			for (Layer* layer : m_LayerStack)
 				layer->OnUpdate(ts);

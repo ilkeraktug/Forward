@@ -112,7 +112,8 @@ project "Sandbox"
 	{
 		"Forward/vendor/spdlog/include",
 		"Forward/src",
-		"%{IncludeDir.glm}"
+		"Forward/vendor",
+		"%{IncludeDir.glm}",
 	}
 
 	links

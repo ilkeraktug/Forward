@@ -1,10 +1,15 @@
 #include <Forward.h>
 
+#include <imgui\imgui.h>
+
+#include <glm\gtx\transform.hpp>
+#include <glm\gtc\type_ptr.hpp>
+
 class ExampleLayer : public Forward::Layer
 {
 public:
 	ExampleLayer()
-		:Layer("Example"), m_Camera(-1.0f, 1.0f, -1.0f, 1.0f)
+		:Layer("Example"), m_Camera(-1.0f, 1.0f, -1.0f, 1.0f), m_CameraPosition(0.0f), m_TrianglePosition(0.0f)
 	{
 		m_VertexArray.reset(Forward::VertexArray::Create());
 
@@ -15,7 +20,7 @@ public:
 			 0.0f,  0.5f, 0.0f,		1.0f, 0.0f, 1.0f, 1.0f
 		};
 
-		std::shared_ptr<Forward::VertexBuffer> vertexBuffer;
+		Forward::Ref<Forward::VertexBuffer> vertexBuffer;
 
 		vertexBuffer.reset(Forward::VertexBuffer::Create(vertices, sizeof(vertices)));
 
@@ -28,7 +33,7 @@ public:
 		m_VertexArray->AddVertexBuffer(vertexBuffer);
 
 		uint32_t indices[] = { 0, 1, 2 };
-		std::shared_ptr<Forward::IndexBuffer> indexBuffer;
+		Forward::Ref<Forward::IndexBuffer> indexBuffer;
 		indexBuffer.reset(Forward::IndexBuffer::Create(indices, 3));
 
 		m_VertexArray->AddIndexBuffer(indexBuffer);
@@ -41,10 +46,11 @@ public:
 
 		out vec4 v_Color;		
 		uniform mat4 u_ViewProjection;		
+		uniform mat4 u_Transform;		
 
 		void main()
 		{
-			gl_Position = u_ViewProjection * a_Position;
+			gl_Position = u_ViewProjection * u_Transform * a_Position;
 			v_Color = a_Color;
 		})";
 
@@ -53,17 +59,15 @@ public:
 	
 		layout(location = 0) out vec4 color;
 
-		in vec4 v_Color;
+		uniform vec4 u_Color;
 
 		void main()
 		{
-			color = vec4(1.0f, 0.5f, 0.31f, 1.0f);
-			color = v_Color;
+			//color = vec4(1.0f, 0.5f, 0.31f, 1.0f);
+			color = u_Color;
 		})";
 
-		m_Shader.reset(new Forward::Shader(vertexSrc, fragmentSrc));
-		//m_Camera.SetPosition({ -0.5f, 0.0f, 0.0f });
-		m_Camera.SetRotation(-45.0f);
+		m_Shader.reset(Forward::Shader::Create(vertexSrc, fragmentSrc));
 	}
 
 	virtual void OnUpdate(Forward::Timestep ts) override
@@ -98,30 +102,67 @@ public:
 			m_CameraRotation += m_CameraRotationSpeed * ts;
 		}
 
+		if (Forward::Input::IsKeyPressed(FW_KEY_A))
+		{
+			m_TrianglePosition.x -= m_CameraMoveSpeed * ts;
+		}
+		else if (Forward::Input::IsKeyPressed(FW_KEY_D))
+		{
+			m_TrianglePosition.x += m_CameraMoveSpeed * ts;
+		}
+
+		if (Forward::Input::IsKeyPressed(FW_KEY_W))
+		{
+			m_TrianglePosition.y += m_CameraMoveSpeed * ts;
+		}
+		else if (Forward::Input::IsKeyPressed(FW_KEY_S))
+		{
+			m_TrianglePosition.y -= m_CameraMoveSpeed * ts;
+		}
+		
 		m_Camera.SetPosition(m_CameraPosition);
 		m_Camera.SetRotation(m_CameraRotation);
 
+		static glm::mat4 scale = glm::scale(glm::vec3(0.1f));	
+
+		std::dynamic_pointer_cast<Forward::OpenGLShader>(m_Shader)->UploadUniformFloat4("u_Color", m_Color);
+
 		{
 			Forward::Renderer::BeginScene(m_Camera);
-
-			Forward::Renderer::Submit(m_VertexArray, m_Shader);
+			for (int y = 0; y < 10; y++)
+			{
+				for (int x = 0; x < 10; x++)
+				{
+					glm::mat4 transform = glm::translate(glm::mat4(1.0f), glm::vec3(x * 0.11f, y * 0.11f, 0.0f)) * scale;
+					Forward::Renderer::Submit(m_VertexArray, m_Shader, transform);
+				}
+			}
 
 			Forward::Renderer::EndScene();
 		}
 
 	}
-
+	
+	virtual void OnImGuiRender() override
+	{
+		ImGui::Begin("Settings");
+		ImGui::ColorPicker4("Color", glm::value_ptr(m_Color));
+		ImGui::End();
+	}
 private:
 
-	std::shared_ptr<Forward::VertexArray> m_VertexArray;
-	std::shared_ptr<Forward::Shader> m_Shader;
+	Forward::Ref<Forward::VertexArray> m_VertexArray;
+	Forward::Ref<Forward::Shader> m_Shader;
 
 	Forward::OrthographicCamera m_Camera;
-	glm::vec3 m_CameraPosition = { 0.0f, 0.0f, 0.0f };
+	glm::vec3 m_CameraPosition;
 	float m_CameraMoveSpeed = 5.0f;
 
 	float m_CameraRotation = 0.0f;
 	float m_CameraRotationSpeed = 180.0f;
+
+	glm::vec3 m_TrianglePosition;
+	glm::vec4 m_Color = { 0.2f, 0.6f, 0.8f, 1.0f };
 };
 
 

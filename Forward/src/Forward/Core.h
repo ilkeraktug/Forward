@@ -1,5 +1,7 @@
 #pragma once
 
+#include <memory>
+
 #ifdef FW_PLATFORM_WINDOWS
 #if FW_DYNAMIC_LINK
 	#ifdef FW_BUILD_DLL 
@@ -25,3 +27,12 @@
 #define BIT(x) (1 << x)
 
 #define Fw_BIND_EVENT_FN(x) std::bind(&x, this, std::placeholders::_1)
+
+namespace Forward {
+
+	template<typename T>
+	using Scope = std::unique_ptr<T>;
+
+	template<typename T>
+	using Ref = std::shared_ptr<T>;
+}

@@ -18,6 +18,8 @@
 #include "Forward\Renderer\VertexArray.h"
 #include "Forward\Renderer\Shader.h"
 
+#include "Platform\OpenGL\OpenGLShader.h"
+
 //------------Entry Point--------
 #include "Forward/EntryPoint.h"
 //-------------------------------

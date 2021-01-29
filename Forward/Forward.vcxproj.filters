@@ -7,6 +7,9 @@
     <Filter Include="src\Forward">
       <UniqueIdentifier>{51AEA424-BD63-1D1A-4658-17F1B20C141E}</UniqueIdentifier>
     </Filter>
+    <Filter Include="src\Forward\Core">
+      <UniqueIdentifier>{496D2C4D-3566-4B9F-5E98-30244AF02AAB}</UniqueIdentifier>
+    </Filter>
     <Filter Include="src\Forward\Events">
       <UniqueIdentifier>{15F51E4F-01D9-DFA4-6A39-DAF7563CCA26}</UniqueIdentifier>
     </Filter>
@@ -57,6 +60,9 @@
     <ClInclude Include="src\Forward\Core.h">
       <Filter>src\Forward</Filter>
     </ClInclude>
+    <ClInclude Include="src\Forward\Core\Timestep.h">
+      <Filter>src\Forward\Core</Filter>
+    </ClInclude>
     <ClInclude Include="src\Forward\EntryPoint.h">
       <Filter>src\Forward</Filter>
     </ClInclude>
@@ -99,6 +105,24 @@
     <ClInclude Include="src\Forward\Renderer\GraphicsContext.h">
       <Filter>src\Forward\Renderer</Filter>
     </ClInclude>
+    <ClInclude Include="src\Forward\Renderer\OrthographicCamera.h">
+      <Filter>src\Forward\Renderer</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Forward\Renderer\RenderCommand.h">
+      <Filter>src\Forward\Renderer</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Forward\Renderer\Renderer.h">
+      <Filter>src\Forward\Renderer</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Forward\Renderer\RendererAPI.h">
+      <Filter>src\Forward\Renderer</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Forward\Renderer\Shader.h">
+      <Filter>src\Forward\Renderer</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Forward\Renderer\VertexArray.h">
+      <Filter>src\Forward\Renderer</Filter>
+    </ClInclude>
     <ClInclude Include="src\Forward\Window.h">
       <Filter>src\Forward</Filter>
     </ClInclude>
@@ -106,6 +130,15 @@
       <Filter>src\Platform\OpenGL</Filter>
     </ClInclude>
     <ClInclude Include="src\Platform\OpenGL\OpenGLContext.h">
+      <Filter>src\Platform\OpenGL</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Platform\OpenGL\OpenGLRendererAPI.h">
+      <Filter>src\Platform\OpenGL</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Platform\OpenGL\OpenGLShader.h">
+      <Filter>src\Platform\OpenGL</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Platform\OpenGL\OpenGLVertexArray.h">
       <Filter>src\Platform\OpenGL</Filter>
     </ClInclude>
     <ClInclude Include="src\Platform\OpenGL\imgui_impl_glfw.h">
@@ -1347,17 +1380,6 @@
     <ClInclude Include="vendor\glm\glm\vector_relational.hpp">
       <Filter>vendor\glm\glm</Filter>
     </ClInclude>
-    <ClInclude Include="src\Forward\Renderer\Shader.h" />
-    <ClInclude Include="src\Forward\Renderer\VertexArray.h" />
-    <ClInclude Include="src\Platform\OpenGL\OpenGLVertexArray.h" />
-    <ClInclude Include="src\Forward\Renderer\RenderCommand.h" />
-    <ClInclude Include="src\Forward\Renderer\Renderer.h">
-      <Filter>src\Forward\Renderer</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Forward\Renderer\RendererAPI.h" />
-    <ClInclude Include="src\Platform\OpenGL\OpenGLRendererAPI.h" />
-    <ClInclude Include="src\Forward\Renderer\OrthographicCamera.h" />
-    <ClInclude Include="src\Forward\Core\Timestep.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Forward\Application.cpp">
@@ -1381,10 +1403,37 @@
     <ClCompile Include="src\Forward\Renderer\Buffer.cpp">
       <Filter>src\Forward\Renderer</Filter>
     </ClCompile>
+    <ClCompile Include="src\Forward\Renderer\OrthographicCamera.cpp">
+      <Filter>src\Forward\Renderer</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Forward\Renderer\RenderCommand.cpp">
+      <Filter>src\Forward\Renderer</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Forward\Renderer\Renderer.cpp">
+      <Filter>src\Forward\Renderer</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Forward\Renderer\RendererAPI.cpp">
+      <Filter>src\Forward\Renderer</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Forward\Renderer\Shader.cpp">
+      <Filter>src\Forward\Renderer</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Forward\Renderer\VertexArray.cpp">
+      <Filter>src\Forward\Renderer</Filter>
+    </ClCompile>
     <ClCompile Include="src\Platform\OpenGL\OpenGLBuffer.cpp">
       <Filter>src\Platform\OpenGL</Filter>
     </ClCompile>
     <ClCompile Include="src\Platform\OpenGL\OpenGLContext.cpp">
+      <Filter>src\Platform\OpenGL</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Platform\OpenGL\OpenGLRendererAPI.cpp">
+      <Filter>src\Platform\OpenGL</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Platform\OpenGL\OpenGLShader.cpp">
+      <Filter>src\Platform\OpenGL</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Platform\OpenGL\OpenGLVertexArray.cpp">
       <Filter>src\Platform\OpenGL</Filter>
     </ClCompile>
     <ClCompile Include="src\Platform\Windows\WindowsInput.cpp">
@@ -1396,13 +1445,5 @@
     <ClCompile Include="src\fwpch.cpp">
       <Filter>src</Filter>
     </ClCompile>
-    <ClCompile Include="src\Forward\Renderer\Shader.cpp" />
-    <ClCompile Include="src\Forward\Renderer\VertexArray.cpp" />
-    <ClCompile Include="src\Platform\OpenGL\OpenGLVertexArray.cpp" />
-    <ClCompile Include="src\Forward\Renderer\RenderCommand.cpp" />
-    <ClCompile Include="src\Forward\Renderer\Renderer.cpp" />
-    <ClCompile Include="src\Forward\Renderer\RendererAPI.cpp" />
-    <ClCompile Include="src\Platform\OpenGL\OpenGLRendererAPI.cpp" />
-    <ClCompile Include="src\Forward\Renderer\OrthographicCamera.cpp" />
   </ItemGroup>
 </Project>
