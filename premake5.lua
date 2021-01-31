@@ -17,6 +17,7 @@ IncludeDir["GLFW"] = "Forward/vendor/GLFW/include"
 IncludeDir["GLAD"] = "Forward/vendor/GLAD/include"
 IncludeDir["imgui"] = "Forward/vendor/imgui"
 IncludeDir["glm"] = "Forward/vendor/glm"
+IncludeDir["stb_image"] = "Forward/vendor/stb_image"
 
 
 include "Forward/vendor/GLFW"
@@ -42,7 +43,9 @@ include "Forward/vendor/imgui"
 		"%{prj.name}/src/**.h",
 		"%{prj.name}/src/**.cpp",
 		"%{IncludeDir.glm}/**.hpp",
-		"%{IncludeDir.glm}/**.inl"
+		"%{IncludeDir.glm}/**.inl",
+		"%{IncludeDir.stb_image}/**.h",
+		"%{IncludeDir.stb_image}/**.cpp"
 	}
 	defines
 	{
@@ -55,7 +58,8 @@ include "Forward/vendor/imgui"
 		"%{IncludeDir.GLFW}",
 		"%{IncludeDir.GLAD}",
 		"%{IncludeDir.imgui}",
-		"%{IncludeDir.glm}"
+		"%{IncludeDir.glm}",
+		"%{IncludeDir.stb_image}"
 	}
 
 	links

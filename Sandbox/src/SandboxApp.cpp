@@ -14,10 +14,11 @@ public:
 		m_VertexArray.reset(Forward::VertexArray::Create());
 
 		float vertices[] = {
-			//Vertex Positions,		Colors
-			-0.5f, -0.5f, 0.0f,		1.0f, 0.5f, 0.31f, 1.0f,
-			 0.5f, -0.5f, 0.0f,		0.0f, 0.8f, 0.8f, 1.0f,
-			 0.0f,  0.5f, 0.0f,		1.0f, 0.0f, 1.0f, 1.0f
+			//Vertex Positions,		TexCoords
+			-0.5f, -0.5f, 0.0f,		0.0f, 0.0f,
+			 0.5f, -0.5f, 0.0f,		1.0f, 0.0f,
+			 0.5f,  0.5f, 0.0f,		1.0f, 1.0f,
+			-0.5f,  0.5f, 0.0f,		0.0f, 1.0f
 		};
 
 		Forward::Ref<Forward::VertexBuffer> vertexBuffer;
@@ -26,15 +27,15 @@ public:
 
 		Forward::BufferLayout layout = {
 			{ Forward::ShaderDataType::Float3, "a_Position" },
-			{ Forward::ShaderDataType::Float4, "a_Color" },
+			{ Forward::ShaderDataType::Float2, "a_TexCoord" },
 		};
 
 		vertexBuffer->SetLayout(layout);
 		m_VertexArray->AddVertexBuffer(vertexBuffer);
 
-		uint32_t indices[] = { 0, 1, 2 };
+		uint32_t indices[] = { 0, 1, 2, 2, 3, 0};
 		Forward::Ref<Forward::IndexBuffer> indexBuffer;
-		indexBuffer.reset(Forward::IndexBuffer::Create(indices, 3));
+		indexBuffer.reset(Forward::IndexBuffer::Create(indices, sizeof(indices) / sizeof(uint32_t)));
 
 		m_VertexArray->AddIndexBuffer(indexBuffer);
 
@@ -42,16 +43,16 @@ public:
 		#version 330
 	
 		layout(location = 0) in vec4 a_Position;
-		layout(location = 1) in vec4 a_Color;
+		layout(location = 1) in vec2 a_TexCoord;
 
-		out vec4 v_Color;		
+		out vec2 v_TexCoord;		
 		uniform mat4 u_ViewProjection;		
 		uniform mat4 u_Transform;		
 
 		void main()
 		{
 			gl_Position = u_ViewProjection * u_Transform * a_Position;
-			v_Color = a_Color;
+			v_TexCoord = a_TexCoord;
 		})";
 
 		std::string fragmentSrc = R"(
@@ -59,15 +60,22 @@ public:
 	
 		layout(location = 0) out vec4 color;
 
-		uniform vec4 u_Color;
+		in vec2 v_TexCoord;
+		uniform sampler2D u_Texture;
 
 		void main()
 		{
-			//color = vec4(1.0f, 0.5f, 0.31f, 1.0f);
-			color = u_Color;
+			//color = vec4(v_TexCoord, 0.0f, 1.0f);
+			color = texture(u_Texture, v_TexCoord);
 		})";
 
 		m_Shader.reset(Forward::Shader::Create(vertexSrc, fragmentSrc));
+
+		m_Texture = Forward::Texture2D::Create("assets/textures/pp.png");
+
+		m_Texture->Bind();
+		std::dynamic_pointer_cast<Forward::OpenGLShader>(m_Shader)->Bind();
+		std::dynamic_pointer_cast<Forward::OpenGLShader>(m_Shader)->UploadUniformInt("u_Texture", 0);
 	}
 
 	virtual void OnUpdate(Forward::Timestep ts) override
@@ -123,20 +131,10 @@ public:
 		m_Camera.SetPosition(m_CameraPosition);
 		m_Camera.SetRotation(m_CameraRotation);
 
-		static glm::mat4 scale = glm::scale(glm::vec3(0.1f));	
-
-		std::dynamic_pointer_cast<Forward::OpenGLShader>(m_Shader)->UploadUniformFloat4("u_Color", m_Color);
-
 		{
 			Forward::Renderer::BeginScene(m_Camera);
-			for (int y = 0; y < 10; y++)
-			{
-				for (int x = 0; x < 10; x++)
-				{
-					glm::mat4 transform = glm::translate(glm::mat4(1.0f), glm::vec3(x * 0.11f, y * 0.11f, 0.0f)) * scale;
-					Forward::Renderer::Submit(m_VertexArray, m_Shader, transform);
-				}
-			}
+
+			Forward::Renderer::Submit(m_VertexArray, m_Shader, glm::scale(glm::vec3(1.5f)));
 
 			Forward::Renderer::EndScene();
 		}
@@ -153,6 +151,8 @@ private:
 
 	Forward::Ref<Forward::VertexArray> m_VertexArray;
 	Forward::Ref<Forward::Shader> m_Shader;
+
+	Forward::Ref<Forward::Texture2D> m_Texture;
 
 	Forward::OrthographicCamera m_Camera;
 	glm::vec3 m_CameraPosition;
