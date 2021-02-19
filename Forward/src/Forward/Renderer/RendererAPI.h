@@ -15,6 +15,7 @@ namespace Forward {
 		};
 
 	public:
+		virtual void Init() = 0;
 		virtual void SetClearColor(glm::vec4& color) = 0;
 		virtual void Clear() = 0;
 

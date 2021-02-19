@@ -21,4 +21,5 @@ namespace Forward {
 
 		static VertexArray* Create();
 	};
+
 }

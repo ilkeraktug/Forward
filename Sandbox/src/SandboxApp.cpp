@@ -9,7 +9,7 @@ class ExampleLayer : public Forward::Layer
 {
 public:
 	ExampleLayer()
-		:Layer("Example"), m_Camera(-1.0f, 1.0f, -1.0f, 1.0f), m_CameraPosition(0.0f), m_TrianglePosition(0.0f)
+		:Layer("Example"), m_Camera(-1.6f, 1.6f, -0.9f, 0.9f), m_CameraPosition(0.0f), m_TrianglePosition(0.0f)
 	{
 		m_VertexArray.reset(Forward::VertexArray::Create());
 
@@ -71,9 +71,9 @@ public:
 
 		m_Shader.reset(Forward::Shader::Create(vertexSrc, fragmentSrc));
 
-		m_Texture = Forward::Texture2D::Create("assets/textures/pp.png");
+		m_BoardTexture = Forward::Texture2D::Create("assets/textures/Checkerboard.png");
+		m_LogoTexture = Forward::Texture2D::Create("assets/textures/ChernoLogo.png");
 
-		m_Texture->Bind();
 		std::dynamic_pointer_cast<Forward::OpenGLShader>(m_Shader)->Bind();
 		std::dynamic_pointer_cast<Forward::OpenGLShader>(m_Shader)->UploadUniformInt("u_Texture", 0);
 	}
@@ -134,6 +134,10 @@ public:
 		{
 			Forward::Renderer::BeginScene(m_Camera);
 
+			m_BoardTexture->Bind();
+			Forward::Renderer::Submit(m_VertexArray, m_Shader, glm::scale(glm::vec3(1.5f)));
+
+			m_LogoTexture->Bind();
 			Forward::Renderer::Submit(m_VertexArray, m_Shader, glm::scale(glm::vec3(1.5f)));
 
 			Forward::Renderer::EndScene();
@@ -152,7 +156,7 @@ private:
 	Forward::Ref<Forward::VertexArray> m_VertexArray;
 	Forward::Ref<Forward::Shader> m_Shader;
 
-	Forward::Ref<Forward::Texture2D> m_Texture;
+	Forward::Ref<Forward::Texture2D> m_BoardTexture, m_LogoTexture;
 
 	Forward::OrthographicCamera m_Camera;
 	glm::vec3 m_CameraPosition;
