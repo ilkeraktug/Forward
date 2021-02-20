@@ -22,8 +22,6 @@ IncludeDir["stb_image"] = "Forward/vendor/stb_image"
 
 include "Forward/vendor/GLFW"
 include "Forward/vendor/GLAD"
-include "Forward/vendor/imgui"
-
 
 	project "Forward"
 		location "Forward"
